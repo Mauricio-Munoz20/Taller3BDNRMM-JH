@@ -1,11 +1,10 @@
-# Taller3BDNR-MM
+# Taller3 BDNR - Plataforma de analítica
 
 Proyecto de análisis de compras compuesto por una API en FastAPI (`backend`) y un frontend en React con Vite (`frontend`).
 
 Autores:
 - Mauricio Muñoz
 - Julian Honores
-
 
 ## Estructura del proyecto
 
@@ -16,8 +15,7 @@ Taller3BDNR-MM/
 │   ├── main.py
 │   ├── queries.py
 │   └── requirements.txt
-├── data/
-│   ├── compras.csv
+├── data/  
 │   └── compras.duckdb
 ├── frontend/
 │   ├── index.html
@@ -48,8 +46,7 @@ Contiene la API de FastAPI y la lógica de acceso a datos.
 ### `data/`
 Contiene los datos del proyecto.
 
-- `compras.csv`: datos de compras originales.
-- `compras.duckdb`: base DuckDB generada a partir del CSV.
+- `compras.duckdb`: base DuckDB generada a partir del CSV original.
 
 ### `frontend/`
 Contiene el frontend de React con Vite.
