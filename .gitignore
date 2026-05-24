@@ -3,10 +3,8 @@ venv/
 __pycache__/
 *.pyc
 
-# DuckDB / datos binarios grandes
-data/*.duckdb
+# Large data files (keep .duckdb, exclude .csv)
 data/*.csv
-*.db
 
 # Node
 frontend/node_modules/
