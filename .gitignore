@@ -1,0 +1,23 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# DuckDB / datos binarios grandes
+data/*.duckdb
+data/*.csv
+*.db
+
+# Node
+frontend/node_modules/
+frontend/dist/
+npm-debug.log
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# OS
+.DS_Store
+
+# Environment
+.env
