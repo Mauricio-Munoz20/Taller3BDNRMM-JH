@@ -3,26 +3,57 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
-const COLORS = ['#daa520', '#00C49F', '#2196F3', '#FF8042', '#8884D8', '#9C27B0'];
+const COLORS = ['#FFD700', '#00C49F', '#2196F3', '#FF8042', '#9C27B0', '#FF1493'];
 
-// Componente personalizado para mostrar tooltips con formato de moneda
-const CustomTooltip = ({ active, payload, label }) => {
+// Componente personalizado para mostrar tooltips con formato condicional según el tipo de métrica
+const CustomTooltip = ({ active, payload, label, valueType }) => {
   if (active && payload && payload.length) {
     const value = payload[0].value;
+    const displayLabel = label ?? payload[0].name ?? payload[0].payload?.label;
     const formattedValue = typeof value === 'number'
-      ? value >= 1000
-        ? `$${value.toLocaleString()}`
-        : value
+      ? valueType === 'currency'
+        ? `$${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+        : `${value.toLocaleString(undefined, { maximumFractionDigits: 0 })} transacciones`
       : value;
 
     return (
       <div className="custom-tooltip">
-        <p className="label">{`${label}`}</p>
-        <p className="value">{formattedValue}</p>
+        <p className="label">{displayLabel}</p>
+        <p className="value" style={{ color: valueType === 'currency' ? 'var(--kpi-ventas-color, #4CAF50)' : 'var(--kpi-promedio-color, #2196F3)' }}>
+          {formattedValue}
+        </p>
       </div>
     );
   }
   return null;
+};
+
+// Formateadores para los ejes de los gráficos
+const formatCurrencyAxis = (value) => {
+  if (value >= 1e12) return `$${(value / 1e12).toFixed(1)}T`;
+  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+  if (value >= 1e3) return `$${(value / 1e3).toFixed(1)}K`;
+  return `$${value}`;
+};
+
+const formatCountAxis = (value) => {
+  if (value >= 1e6) return `${(value / 1e6).toFixed(1)}M`;
+  if (value >= 1e3) return `${(value / 1e3).toFixed(1)}K`;
+  return value;
+};
+
+// Función para renderizar porcentajes centrados en los segmentos del Donut Chart
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.55;
+  const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
+  const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
+
+  return (
+    <text x={x} y={y} fill="#ffffff" textAnchor="middle" dominantBaseline="central" fontSize={11} fontWeight="bold">
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
 };
 
 // Componente principal para mostrar los gráficos analíticos
@@ -41,14 +72,14 @@ function Charts({ data }) {
             <BarChart data={data.categoria || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorCategoria" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.9}/>
-                  <stop offset="95%" stopColor="#2E7D32" stopOpacity={0.3}/>
+                  <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.95}/>
+                  <stop offset="95%" stopColor="#2E7D32" stopOpacity={0.35}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.15)" />
-              <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-              <YAxis tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+              <YAxis tickLine={false} axisLine={false} tickFormatter={formatCurrencyAxis} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+              <Tooltip content={<CustomTooltip valueType="currency" />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
               <Bar dataKey="value" fill="url(#colorCategoria)" radius={[6, 6, 0, 0]} maxBarSize={50} />
             </BarChart>
           </ResponsiveContainer>
@@ -61,14 +92,14 @@ function Charts({ data }) {
             <BarChart data={data.ciudad || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorCiudad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2196F3" stopOpacity={0.9}/>
-                  <stop offset="95%" stopColor="#1565C0" stopOpacity={0.3}/>
+                  <stop offset="5%" stopColor="#2196F3" stopOpacity={0.95}/>
+                  <stop offset="95%" stopColor="#1565C0" stopOpacity={0.35}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.15)" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
-              <YAxis tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
+              <YAxis tickLine={false} axisLine={false} tickFormatter={formatCountAxis} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+              <Tooltip content={<CustomTooltip valueType="count" />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
               <Bar dataKey="value" fill="url(#colorCiudad)" radius={[6, 6, 0, 0]} maxBarSize={40} />
             </BarChart>
           </ResponsiveContainer>
@@ -83,18 +114,20 @@ function Charts({ data }) {
                 data={data.edad || []}
                 cx="50%"
                 cy="50%"
-                innerRadius={70}
+                innerRadius={65}
                 outerRadius={95}
                 paddingAngle={4}
                 dataKey="value"
                 nameKey="label"
+                labelLine={false}
+                label={renderCustomizedLabel}
               >
                 {(data.edad || []).map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="var(--chart-card-bg)" strokeWidth={2} />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" />
+              <Tooltip content={<CustomTooltip valueType="count" />} />
+              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: 11, color: 'var(--text-secondary)' }} />
             </PieChart>
           </ResponsiveContainer>
         </article>
@@ -106,14 +139,14 @@ function Charts({ data }) {
             <AreaChart data={data.fecha || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorFecha" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#FF9800" stopOpacity={0.4}/>
-                  <stop offset="95%" stopColor="#FF9800" stopOpacity={0.0}/>
+                  <stop offset="5%" stopColor="#FF9800" stopOpacity={0.45}/>
+                  <stop offset="95%" stopColor="#FF9800" stopOpacity={0.00}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.15)" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
-              <YAxis tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-              <Tooltip content={<CustomTooltip />} />
+              <YAxis tickLine={false} axisLine={false} tickFormatter={formatCurrencyAxis} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+              <Tooltip content={<CustomTooltip valueType="currency" />} />
               <Area type="monotone" dataKey="value" stroke="#FF9800" strokeWidth={3} fillOpacity={1} fill="url(#colorFecha)" />
             </AreaChart>
           </ResponsiveContainer>
@@ -126,14 +159,14 @@ function Charts({ data }) {
             <BarChart data={data.producto || []} layout="vertical" margin={{ top: 10, right: 10, left: 20, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorProducto" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="5%" stopColor="#9C27B0" stopOpacity={0.9}/>
-                  <stop offset="95%" stopColor="#6A1B9A" stopOpacity={0.3}/>
+                  <stop offset="5%" stopColor="#9C27B0" stopOpacity={0.95}/>
+                  <stop offset="95%" stopColor="#6A1B9A" stopOpacity={0.35}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgba(128,128,128,0.15)" />
-              <XAxis type="number" tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgba(128,128,128,0.12)" />
+              <XAxis type="number" tickLine={false} axisLine={false} tickFormatter={formatCurrencyAxis} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
               <YAxis dataKey="label" type="category" width={110} tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
+              <Tooltip content={<CustomTooltip valueType="currency" />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
               <Bar dataKey="value" fill="url(#colorProducto)" radius={[0, 6, 6, 0]} maxBarSize={20} />
             </BarChart>
           </ResponsiveContainer>
@@ -146,14 +179,14 @@ function Charts({ data }) {
             <BarChart data={data.metodo_pago || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorMetodo" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#00BCD4" stopOpacity={0.9}/>
-                  <stop offset="95%" stopColor="#00838F" stopOpacity={0.3}/>
+                  <stop offset="5%" stopColor="#00BCD4" stopOpacity={0.95}/>
+                  <stop offset="95%" stopColor="#00838F" stopOpacity={0.35}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.15)" />
-              <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-              <YAxis tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+              <YAxis tickLine={false} axisLine={false} tickFormatter={formatCountAxis} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+              <Tooltip content={<CustomTooltip valueType="count" />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
               <Bar dataKey="value" fill="url(#colorMetodo)" radius={[6, 6, 0, 0]} maxBarSize={50} />
             </BarChart>
           </ResponsiveContainer>
