@@ -1,39 +1,46 @@
 def build_where(filters: dict) -> tuple[str, dict]:
-    #Construye WHERE dinámico con parámetros seguros
+    #Construye WHERE dinámico con parámetros seguros y case-insensitive
     clauses = []
     params = {}
     
     if filters.get("ciudad"):
-        clauses.append("ciudad = $ciudad")
+        clauses.append("LOWER(ciudad) = LOWER($ciudad)")
         params["ciudad"] = filters["ciudad"]
     
     if filters.get("categoria"):
-        clauses.append("categoria = $categoria")
+        clauses.append("LOWER(categoria) = LOWER($categoria)")
         params["categoria"] = filters["categoria"]
     
     if filters.get("metodo_pago"):
-        clauses.append("metodopago = $metodo")
+        clauses.append("LOWER(metodopago) = LOWER($metodo)")
         params["metodo"] = filters["metodo_pago"]
     
+    # Manejar rango de fecha completo o parcial
     if filters.get("fecha_inicio") and filters.get("fecha_fin"):
         clauses.append("fecha BETWEEN $fecha_inicio AND $fecha_fin")
         params["fecha_inicio"] = filters["fecha_inicio"]
+        params["fecha_fin"] = filters["fecha_fin"]
+    elif filters.get("fecha_inicio"):
+        clauses.append("fecha >= $fecha_inicio")
+        params["fecha_inicio"] = filters["fecha_inicio"]
+    elif filters.get("fecha_fin"):
+        clauses.append("fecha <= $fecha_fin")
         params["fecha_fin"] = filters["fecha_fin"]
     
     where_clause = " AND ".join(clauses) if clauses else ""
     return where_clause, params
 
 def get_kpis(filters: dict):
-    #Retorna los 6 KPIs obligatorios según los filtros aplicados
+    #Retorna los 6 KPIs obligatorios según los filtros aplicados (con cálculos correctos)
     where, params = build_where(filters)
     where_sql = f"WHERE {where}" if where else ""
     
     return f"""
         SELECT 
             COALESCE(SUM(precio), 0) as total_ventas,
-            COALESCE(AVG(precio), 0)::INTEGER as promedio_gasto,
-            MODE(categoria) as cat_mas_vendida,
-            MODE(producto) as prod_mas_vendido,
+            COALESCE(ROUND(AVG(precio), 2), 0) as promedio_gasto,
+            (SELECT categoria FROM compras {where_sql} GROUP BY categoria ORDER BY SUM(precio) DESC LIMIT 1) as cat_mas_vendida,
+            (SELECT producto FROM compras {where_sql} GROUP BY producto ORDER BY SUM(precio) DESC LIMIT 1) as prod_mas_vendido,
             MODE(ciudad) as ciudad_mas_compras,
             MODE(metodopago) as metodo_mas_usado
         FROM compras {where_sql}

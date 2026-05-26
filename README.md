@@ -3,8 +3,8 @@
 Proyecto de análisis de compras compuesto por una API en FastAPI (`backend`) y un frontend en React con Vite (`frontend`).
 
 Autores:
-- Mauricio Muñoz
-- Julian Honores
+- Mauricio Muñoz (mauricio.munoz01@alumnos.ucn.cl - 21.542.213-5)
+- Julian Honores (julian.honores@alumnos.ucn.cl - 21.328.088-0)
 
 ## Estructura del proyecto
 
@@ -15,7 +15,8 @@ Taller3BDNR-MM/
 │   ├── main.py
 │   ├── queries.py
 │   └── requirements.txt
-├── data/  
+├── data/
+│   ├── compras.csv #Ignorado
 │   └── compras.duckdb
 ├── frontend/
 │   ├── index.html
@@ -154,17 +155,13 @@ O con npm:
 npm run dev
 ```
 
-5. Abre el navegador en `http://localhost:3000`.
+5. Abre el navegador en `http://127.0.0.1:3005`.
 
 ## Notas importantes
 
 - El backend debe estar ejecutándose antes de abrir el frontend para que éste pueda consumir la API.
-- Si `http://localhost:3000` ya está ocupado, usa otro puerto con Vite:
-
-```bash
-pnpm run dev -- --port 3001 (o cualquier otro puerto disponible que no esté ocupado)
-```
-
+- **¿Por qué se usa el puerto 3005 por defecto?** En sistemas Windows, el puerto `3000` suele ser ocupado o restringido por servicios internos del sistema (como Hyper-V o WSL2). El proyecto está preconfigurado en `vite.config.js` para iniciar directamente en el puerto `3005` y evitar cualquier conflicto.
+- Si por algún motivo deseas cambiarlo, puedes hacerlo modificando el valor `port` en `frontend/vite.config.js`.
 - Si tu frontend no carga, confirma que `frontend/index.html` y `frontend/src/main.jsx` existan en la estructura del proyecto.
 
 ---
