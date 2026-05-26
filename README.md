@@ -1,10 +1,10 @@
-# Taller3BDNR-MM
+# Taller3BDNR-MM-JH
 
 Proyecto de análisis de compras compuesto por una API en FastAPI (`backend`) y un frontend en React con Vite (`frontend`).
 
 Autores:
-- Mauricio Muñoz
-- Julian Honores
+- Mauricio Muñoz (mauricio.munoz01@alumnos.ucn.cl - 21.542.213-5)
+- Julian Honores (julian.honores@alumnos.ucn.cl - 21.328.088-0)
 
 
 ## Estructura del proyecto
