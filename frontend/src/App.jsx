@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
+import { Moon, Sun } from "lucide-react";
 import Filters from "./components/Filters";
 import KPIs from "./components/KPIs";
 import Charts from "./components/Charts";
@@ -107,8 +108,12 @@ function App() {
             <h1>Plataforma de Analitica de Compras</h1>
             <p>Dashboard de 5 Millones de registros | DuckDB</p>
           </div>
-          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-            {theme === "light" ? "🌙 Modo Oscuro" : "☀️ Modo Claro"}
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            {theme === "light" ? (
+              <><Moon size={16} /> Modo Oscuro</>
+            ) : (
+              <><Sun size={16} /> Modo Claro</>
+            )}
           </button>
         </div>
       </header>
