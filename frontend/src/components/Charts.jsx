@@ -62,7 +62,7 @@ function Charts({ data }) {
 
   return (
     <section className="charts-container">
-      <h2>📊 Visualizaciones Analíticas</h2>
+      <h2>Visualizaciones Analíticas</h2>
 
       <div className="charts-grid">
         {/* 1. Ventas por Categoría */}
@@ -72,8 +72,8 @@ function Charts({ data }) {
             <BarChart data={data.categoria || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorCategoria" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.95}/>
-                  <stop offset="95%" stopColor="#2E7D32" stopOpacity={0.35}/>
+                  <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.95} />
+                  <stop offset="95%" stopColor="#2E7D32" stopOpacity={0.35} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />
@@ -92,8 +92,8 @@ function Charts({ data }) {
             <BarChart data={data.ciudad || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorCiudad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2196F3" stopOpacity={0.95}/>
-                  <stop offset="95%" stopColor="#1565C0" stopOpacity={0.35}/>
+                  <stop offset="5%" stopColor="#2196F3" stopOpacity={0.95} />
+                  <stop offset="95%" stopColor="#1565C0" stopOpacity={0.35} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />
@@ -139,8 +139,8 @@ function Charts({ data }) {
             <AreaChart data={data.fecha || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorFecha" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#FF9800" stopOpacity={0.45}/>
-                  <stop offset="95%" stopColor="#FF9800" stopOpacity={0.00}/>
+                  <stop offset="5%" stopColor="#FF9800" stopOpacity={0.45} />
+                  <stop offset="95%" stopColor="#FF9800" stopOpacity={0.00} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />
@@ -159,8 +159,8 @@ function Charts({ data }) {
             <BarChart data={data.producto || []} layout="vertical" margin={{ top: 10, right: 10, left: 20, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorProducto" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="5%" stopColor="#9C27B0" stopOpacity={0.95}/>
-                  <stop offset="95%" stopColor="#6A1B9A" stopOpacity={0.35}/>
+                  <stop offset="5%" stopColor="#9C27B0" stopOpacity={0.95} />
+                  <stop offset="95%" stopColor="#6A1B9A" stopOpacity={0.35} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgba(128,128,128,0.12)" />
@@ -179,8 +179,8 @@ function Charts({ data }) {
             <BarChart data={data.metodo_pago || []} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="colorMetodo" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#00BCD4" stopOpacity={0.95}/>
-                  <stop offset="95%" stopColor="#00838F" stopOpacity={0.35}/>
+                  <stop offset="5%" stopColor="#00BCD4" stopOpacity={0.95} />
+                  <stop offset="95%" stopColor="#00838F" stopOpacity={0.35} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128,128,128,0.12)" />

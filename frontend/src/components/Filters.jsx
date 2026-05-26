@@ -17,10 +17,24 @@ function Filters({ filters, onFilterChange }) {
             id="ciudad"
             name="ciudad"
             type="text"
+            list="ciudades-list"
             value={filters.ciudad}
             onChange={handleChange}
             placeholder="Ingrese una ciudad"
+            autoComplete="off"
           />
+          <datalist id="ciudades-list">
+            <option value="Temuco" />
+            <option value="Concepcion" />
+            <option value="La Serena" />
+            <option value="Puerto Montt" />
+            <option value="Osorno" />
+            <option value="Valparaiso" />
+            <option value="Santiago" />
+            <option value="Antofagasta" />
+            <option value="Rancagua" />
+            <option value="Talca" />
+          </datalist>
         </div>
 
         <div className="filter-row">
@@ -29,10 +43,19 @@ function Filters({ filters, onFilterChange }) {
             id="categoria"
             name="categoria"
             type="text"
+            list="categorias-list"
             value={filters.categoria}
             onChange={handleChange}
             placeholder="Ingrese una categoría"
+            autoComplete="off"
           />
+          <datalist id="categorias-list">
+            <option value="Juguetes" />
+            <option value="Comida" />
+            <option value="Bebidas" />
+            <option value="Ropa" />
+            <option value="Tecnologia" />
+          </datalist>
         </div>
 
         <div className="filter-row">
@@ -41,10 +64,18 @@ function Filters({ filters, onFilterChange }) {
             id="metodo_pago"
             name="metodo_pago"
             type="text"
+            list="metodos-list"
             value={filters.metodo_pago}
             onChange={handleChange}
             placeholder="Efectivo, tarjeta, etc."
+            autoComplete="off"
           />
+          <datalist id="metodos-list">
+            <option value="Efectivo" />
+            <option value="Credito" />
+            <option value="Transferencia" />
+            <option value="Debito" />
+          </datalist>
         </div>
 
         <div className="filter-row">

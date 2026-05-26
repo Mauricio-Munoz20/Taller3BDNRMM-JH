@@ -1,4 +1,5 @@
 // Componente para mostrar los KPIs principales en la interfaz de usuario
+import { DollarSign, BarChart3, Tag, Package, Building2, CreditCard } from "lucide-react";
 
 function KPIs({ data }) {
   if (!data) return null;
@@ -15,43 +16,43 @@ function KPIs({ data }) {
       title: 'Total Ventas',
       value: formatCurrency(data.total_ventas || 0),
       color: 'var(--kpi-ventas-color, #4CAF50)',
-      icon: '💰'
+      icon: <DollarSign size={20} />
     },
     {
       title: 'Promedio Gasto',
       value: formatCurrency(data.promedio_gasto || 0, true),
       color: 'var(--kpi-promedio-color, #2196F3)',
-      icon: '📊'
+      icon: <BarChart3 size={20} />
     },
     {
       title: 'Categoría Más Vendida',
       value: data.cat_mas_vendida || 'N/A',
       color: 'var(--kpi-cat-color, #FF9800)',
-      icon: '🏷️'
+      icon: <Tag size={20} />
     },
     {
       title: 'Producto Más Vendido',
       value: data.prod_mas_vendido || 'N/A',
       color: 'var(--kpi-prod-color, #9C27B0)',
-      icon: '📦'
+      icon: <Package size={20} />
     },
     {
       title: 'Ciudad con Más Compras',
       value: data.ciudad_mas_compras || 'N/A',
       color: 'var(--kpi-ciudad-color, #E91E63)',
-      icon: '🏙️'
+      icon: <Building2 size={20} />
     },
     {
       title: 'Método Más Usado',
       value: data.metodo_mas_usado || 'N/A',
       color: 'var(--kpi-metodo-color, #00BCD4)',
-      icon: '💳'
+      icon: <CreditCard size={20} />
     }
   ];
 
   return (
     <section className="kpis-container">
-      <h2>📈 KPIs Principales</h2>
+      <h2>KPIs Principales</h2>
       <div className="kpis-grid">
         {kpis.map((kpi, index) => (
           <article key={index} className="kpi-card" style={{ '--kpi-border-color': kpi.color }}>
