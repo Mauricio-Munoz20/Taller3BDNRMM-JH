@@ -1,4 +1,4 @@
-# Taller3 BDNR - Plataforma de analítica
+# Taller3 BDNR MM y JH - Plataforma de analítica de compras
 
 Proyecto de análisis de compras compuesto por una API en FastAPI (`backend`) y un frontend en React con Vite (`frontend`).
 
@@ -47,6 +47,7 @@ Contiene la API de FastAPI y la lógica de acceso a datos.
 ### `data/`
 Contiene los datos del proyecto.
 
+- `compras.csv`: Registro de los 5 millones de datos.
 - `compras.duckdb`: base DuckDB generada a partir del CSV original.
 
 ### `frontend/`
